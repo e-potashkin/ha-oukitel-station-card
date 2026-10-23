@@ -50,7 +50,7 @@
 //   uk for Ukrainian, English for anything else.
 
 const TAG = 'oukitel-station-card';
-const VERSION = '1.0.1';
+const VERSION = '1.0.2';
 
 const DEFAULTS = {
   name: 'Oukitel',
@@ -65,7 +65,8 @@ const STRINGS = {
     off: 'Вимкнено',
     unavailable: 'Недоступно',
     hours: 'год',
-    confirm: 'Дім живиться від станції. Вимкнення {name} знеструмить дім.',
+    confirmTitle: 'Дім живиться від станції',
+    confirmText: 'Вимкнення {name} знеструмить дім.',
     cancel: 'Скасувати',
     turnOff: 'Вимкнути',
     moreInfo: 'Відкрити подробиці',
@@ -78,7 +79,8 @@ const STRINGS = {
     off: 'Off',
     unavailable: 'Unavailable',
     hours: 'h',
-    confirm: 'The house runs on the station. Turning off {name} cuts the power.',
+    confirmTitle: 'The house runs on the station',
+    confirmText: 'Turning off {name} cuts the power.',
     cancel: 'Cancel',
     turnOff: 'Turn off',
     moreInfo: 'Open details',
@@ -162,16 +164,23 @@ const STYLE = `
     margin-top: 12px; padding-top: 12px;
     border-top: 1px solid var(--divider-color, rgba(255, 255, 255, .08));
   }
-  .confirm { display: flex; flex-direction: column; gap: 10px; }
-  .q { font-size: 13px; line-height: 1.35; color: var(--primary-text-color); text-align: center; }
-  .acts { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
-  .acts button {
-    border: 0; border-radius: 10px; padding: 8px 14px;
-    font: inherit; font-size: 13px; font-weight: 500; cursor: pointer;
+  .confirm { display: flex; flex-direction: column; }
+  .ct { font-size: 13px; font-weight: 600; color: var(--primary-text-color); }
+  .cx { margin-top: 3px; font-size: 12px; line-height: 1.4; color: var(--secondary-text-color); }
+  .cacts {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 12px; padding-top: 10px;
+    border-top: 1px solid var(--divider-color, rgba(255, 255, 255, .08));
   }
-  .acts button:focus-visible { outline: 2px solid var(--primary-color); outline-offset: 2px; }
-  .no { background: var(--secondary-background-color, rgba(255, 255, 255, .08)); color: var(--primary-text-color); }
-  .yes { background: #d32f2f; color: #fff; }
+  .cacts button {
+    display: inline-flex; align-items: center; gap: 4px;
+    border: 0; border-radius: 8px; background: none;
+    padding: 10px 4px; font: inherit; font-size: 13px; cursor: pointer;
+  }
+  .cacts button:focus-visible { outline: 2px solid var(--primary-color); outline-offset: 2px; }
+  .cno { color: var(--secondary-text-color); }
+  .cyes { color: #ff6b6b; font-weight: 600; }
+  .cyes ha-icon { --mdc-icon-size: 16px; }
   .sr {
     position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
     overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
@@ -336,13 +345,14 @@ class OukitelStationCard extends HTMLElement {
     let body;
     if (this._confirm) {
       const output = config.outputs.find((item) => item.entity === this._confirm);
-      const question = L.confirm.replace('{name}', output.name);
+      const question = L.confirmText.replace('{name}', output.name);
       body = `
-        <div class="confirm" role="group" aria-label="${escapeHtml(question)}">
-          <div class="q">${escapeHtml(question)}</div>
-          <div class="acts">
-            <button type="button" class="no" data-cancel>${escapeHtml(L.cancel)}</button>
-            <button type="button" class="yes" data-yes="${escapeHtml(output.entity)}">${escapeHtml(L.turnOff)}</button>
+        <div class="confirm" role="group" aria-label="${escapeHtml(`${L.confirmTitle}. ${question}`)}">
+          <div class="ct">${escapeHtml(L.confirmTitle)}</div>
+          <div class="cx">${escapeHtml(question)}</div>
+          <div class="cacts">
+            <button type="button" class="cno" data-cancel>${escapeHtml(L.cancel)}</button>
+            <button type="button" class="cyes" data-yes="${escapeHtml(output.entity)}">${escapeHtml(L.turnOff)}<ha-icon icon="mdi:chevron-right"></ha-icon></button>
           </div>
         </div>
       `;
