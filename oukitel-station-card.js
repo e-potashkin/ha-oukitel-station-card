@@ -50,7 +50,7 @@
 //   uk for Ukrainian, English for anything else.
 
 const TAG = 'oukitel-station-card';
-const VERSION = '1.0.0';
+const VERSION = '1.0.1';
 
 const DEFAULTS = {
   name: 'Oukitel',
@@ -163,8 +163,8 @@ const STYLE = `
     border-top: 1px solid var(--divider-color, rgba(255, 255, 255, .08));
   }
   .confirm { display: flex; flex-direction: column; gap: 10px; }
-  .q { font-size: 13px; line-height: 1.35; color: var(--primary-text-color); }
-  .acts { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+  .q { font-size: 13px; line-height: 1.35; color: var(--primary-text-color); text-align: center; }
+  .acts { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
   .acts button {
     border: 0; border-radius: 10px; padding: 8px 14px;
     font: inherit; font-size: 13px; font-weight: 500; cursor: pointer;
